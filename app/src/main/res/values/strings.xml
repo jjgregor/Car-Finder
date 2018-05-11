@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Car Finder</string>
+    <string name="amadeus_api">https://api.sandbox.amadeus.com/v1.2/</string>
+    <string name="amadeus_key">zSWrzQ41V86aAsPnGqyVY9fOAkcnqlyK</string>
+</resources>
