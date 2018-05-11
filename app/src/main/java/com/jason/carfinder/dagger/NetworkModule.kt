@@ -13,6 +13,7 @@ import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory
 import retrofit2.converter.jackson.JacksonConverterFactory
+import javax.inject.Named
 import javax.inject.Singleton
 
 @Module
@@ -27,6 +28,8 @@ class NetworkModule(private val baseUrl: String, internal val context: Context) 
 
     @Provides
     @Singleton
+    @Named("Amadeus")
+    @AppScope
     internal fun provideOkHttpClient(cache: Cache): OkHttpClient {
         return OkHttpClient.Builder()
                 .addInterceptor { chain ->
@@ -41,6 +44,7 @@ class NetworkModule(private val baseUrl: String, internal val context: Context) 
 
     @Provides
     @Singleton
+    @AppScope
     internal fun provideRetrofit(client: OkHttpClient): Retrofit {
         return Retrofit.Builder().baseUrl(baseUrl)
                 .addConverterFactory(JacksonConverterFactory.create(ObjectMapperFactory().getObjectMapper()))
