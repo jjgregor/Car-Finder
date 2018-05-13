@@ -16,9 +16,8 @@ class CarFinderApp : Application() {
         component = DaggerAppComponent
                 .builder()
                 .appModule(AppModule(this))
-                .networkModule(NetworkModule(getString(R.string.amadeus_api), applicationContext))
+                .networkModule(NetworkModule(applicationContext))
                 .build()
     }
 
-    fun getAppComponent(): AppComponent = component
 }

@@ -10,7 +10,8 @@ import javax.inject.Named
 class ServiceMod {
 
     @Provides
-    internal fun provideStackOverflowService(@Named("Amadeus") restAdapter: Retrofit) : AmadeusService {
+    @AppScope
+    fun provideStackOverflowService(@Named("Amadeus") restAdapter: Retrofit) : AmadeusService {
         return restAdapter.create(AmadeusService::class.java)
     }
 
