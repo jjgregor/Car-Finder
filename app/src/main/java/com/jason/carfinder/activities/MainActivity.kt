@@ -26,7 +26,6 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.jason.carfinder.R
 import com.jason.carfinder.adapters.CarCompanyAdapter
-import com.jason.carfinder.models.AmadeusResponse
 import com.jason.carfinder.models.MainActivityViewModel
 import kotlinx.android.synthetic.main.activity_main.*
 
@@ -42,9 +41,8 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         setContentView(R.layout.activity_main)
         setViewVisibilities(false, false)
         viewModel = ViewModelProviders.of(this).get(MainActivityViewModel::class.java)
-        carCompanyAdapter = CarCompanyAdapter(viewModel.results)
-        initObservers()
         setupRecyclerView()
+        initObservers()
 
         mapFragment = supportFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
 
@@ -57,19 +55,21 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
     }
 
     private fun initObservers() {
-        viewModel.carsObserver.observe(this, Observer<AmadeusResponse> { response ->
-            response?.let {
-                if(it.results.isNotEmpty() == true) {
+        viewModel.carsObserver.observe(this, Observer { response ->
+            response?.results?.let {
+                if (it.isNotEmpty()) {
                     setViewVisibilities(true, false)
                 } else {
                     setViewVisibilities(false, true)
                 }
-                car_company_recycler_view.adapter.notifyDataSetChanged()
+                carCompanyAdapter.results.clear()
+                carCompanyAdapter.results.addAll(it)
             } ?: Log.d(TAG, "Call failed $response")
         })
     }
 
     private fun setupRecyclerView() {
+        carCompanyAdapter = CarCompanyAdapter(arrayListOf())
         car_company_recycler_view.layoutManager = LinearLayoutManager(this)
         car_company_recycler_view.adapter = carCompanyAdapter
     }
@@ -113,7 +113,6 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
 
     override fun onMapReady(map: GoogleMap?) {
         map?.let {
-
             val curr = if (viewModel.latitude != 0.0 && viewModel.longitude != 0.0) {
                 LatLng(viewModel.latitude, viewModel.longitude)
             } else {

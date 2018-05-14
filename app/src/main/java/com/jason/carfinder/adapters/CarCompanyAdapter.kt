@@ -2,6 +2,7 @@ package com.jason.carfinder.adapters
 
 import android.databinding.DataBindingUtil
 import android.support.v7.widget.RecyclerView
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import com.jason.carfinder.BR
@@ -9,7 +10,7 @@ import com.jason.carfinder.R
 import com.jason.carfinder.databinding.CompanyRecyclerItemBinding
 import com.jason.carfinder.models.Company
 
-class CarCompanyAdapter(private val results: ArrayList<Company>) : RecyclerView.Adapter<CarCompanyAdapter.ViewHolder>() {
+class CarCompanyAdapter(val results: ArrayList<Company>) : RecyclerView.Adapter<CarCompanyAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int)
             = ViewHolder(DataBindingUtil.inflate(LayoutInflater.from(parent.context), R.layout.company_recycler_item, parent, false))
@@ -19,13 +20,17 @@ class CarCompanyAdapter(private val results: ArrayList<Company>) : RecyclerView.
 
     override fun getItemCount() = results.size
 
-    inner class ViewHolder(val binding: CompanyRecyclerItemBinding) : RecyclerView.ViewHolder(binding.root) {
+    inner class ViewHolder(private val binding: CompanyRecyclerItemBinding) : RecyclerView.ViewHolder(binding.root) {
 
         fun bindItem(company: Company) {
-//            binding.company = company
+            Log.d(TAG, "Company $company")
             binding.setVariable(BR.company, company)
             binding.executePendingBindings()
         }
+    }
+
+    companion object {
+        val TAG: String = CarCompanyAdapter::class.java.simpleName
     }
 
 }

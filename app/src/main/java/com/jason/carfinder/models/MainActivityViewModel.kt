@@ -36,10 +36,10 @@ class MainActivityViewModel(app: Application) : AndroidViewModel(app) {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({ response ->
                     response?.let {
-                        carsObserver.value = it
                         results = it.results
-                    } ?: Log.d(TAG, "Amadeus reponse is null $response")
-                }, { t: Throwable? -> Log.d(TAG, "Amadeus reponse is null $t") })
+                        carsObserver.value = it
+                    } ?: Log.d(TAG, "Amadeus response is null $response")
+                }, { t: Throwable? -> Log.d(TAG, "Amadeus response is null $t") })
     }
 
     private fun getQueryMap(): Map<String, String> {

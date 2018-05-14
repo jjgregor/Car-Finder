@@ -42,11 +42,10 @@
     <android.support.v7.widget.RecyclerView
         android:id="@+id/car_company_recycler_view"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_marginBottom="@dimen/default_margin"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="88dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/fab"
         app:layout_constraintTop_toBottomOf="@+id/map" />
 
     <android.support.design.widget.FloatingActionButton
