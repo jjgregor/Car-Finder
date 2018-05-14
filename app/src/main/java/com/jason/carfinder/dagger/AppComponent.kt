@@ -13,8 +13,5 @@ interface AppComponent {
 
     fun inject(activity: MainActivityViewModel)
 
-    fun inject(carSearchFragment: CarSearchFragment) {
-
-    }
-
+    fun inject(carSearchFragment: CarSearchFragment)
 }

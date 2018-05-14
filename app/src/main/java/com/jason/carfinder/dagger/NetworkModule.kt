@@ -10,6 +10,7 @@ import dagger.Module
 import dagger.Provides
 import okhttp3.Cache
 import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory
 import retrofit2.converter.jackson.JacksonConverterFactory
@@ -38,7 +39,13 @@ class NetworkModule(val context: Context) {
     @Named("Amadeus")
     @AppScope
     internal fun provideAmadeusRestAdapter(client: OkHttpClient): Retrofit {
-        val newClient = client.newBuilder().addInterceptor(AmadeusInterceptor(context)).build()
+        val interceptor: HttpLoggingInterceptor = HttpLoggingInterceptor().apply {
+            this.level = HttpLoggingInterceptor.Level.BODY
+        }
+        val newClient = client.newBuilder()
+                .addInterceptor(AmadeusInterceptor(context))
+                .addInterceptor(interceptor)
+                .build()
         return Retrofit.Builder().baseUrl(context.getString(R.string.amadeus_api))
                 .addConverterFactory(JacksonConverterFactory.create(ObjectMapperFactory().getObjectMapper()))
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
