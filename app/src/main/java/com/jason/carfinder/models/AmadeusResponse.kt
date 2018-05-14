@@ -1,12 +1,12 @@
 package com.jason.carfinder.models
 
-data class AmadeusResponse(val results: MutableList<Company>? = ArrayList())
+data class AmadeusResponse(val results: ArrayList<Company> = ArrayList())
 
-data class Company(val provider: Provider,
+data class Company(val provider: Provider? = Provider(),
                    val location: Location? = Location(),
                    val branch_id: String? = "",
                    val address: Address? = Address(),
-                   val cars: MutableList<CarsObject>)
+                   val cars: ArrayList<CarsObject>)
 
 data class Provider(val company_code: String? = "",
                     val company_name: String = "")
@@ -20,7 +20,7 @@ data class Address(val line1: String? = "",
                    val country: String? = "")
 
 data class CarsObject(val vehicle_info: VehicleInfo? = VehicleInfo(),
-                      val rates: MutableList<RatesObject>? = ArrayList(),
+                      val rates: ArrayList<RatesObject>? = ArrayList(),
                       val estimated_total: Totals? = Totals())
 
 data class VehicleInfo(val acriss_code: String? = "",

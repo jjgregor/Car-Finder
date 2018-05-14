@@ -11,15 +11,13 @@ import rx.schedulers.Schedulers
 import java.text.SimpleDateFormat
 import java.util.*
 import javax.inject.Inject
+import kotlin.collections.ArrayList
 
 class MainActivityViewModel(app: Application) : AndroidViewModel(app) {
 
-    init {
-        (app as CarFinderApp).component.inject(this)
-    }
+    init { (app as CarFinderApp).component.inject(this) }
 
-    @Inject
-    lateinit var amadeusService: AmadeusService
+    @Inject lateinit var amadeusService: AmadeusService
 
     var latitude = 0.0
     var longitude = 0.0
@@ -28,6 +26,7 @@ class MainActivityViewModel(app: Application) : AndroidViewModel(app) {
     var radius = 50
 
     val carsObserver = MutableLiveData<AmadeusResponse>()
+    var results = ArrayList<Company>()
 
     private fun formatDate(date: Date) = SimpleDateFormat("yyyy-MM-dd", Locale.US).format(date).toString()
 
@@ -38,6 +37,7 @@ class MainActivityViewModel(app: Application) : AndroidViewModel(app) {
                 .subscribe({ response ->
                     response?.let {
                         carsObserver.value = it
+                        results = it.results
                     } ?: Log.d(TAG, "Amadeus reponse is null $response")
                 }, { t: Throwable? -> Log.d(TAG, "Amadeus reponse is null $t") })
     }
