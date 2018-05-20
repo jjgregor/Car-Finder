@@ -9,4 +9,5 @@
     <string name="air_conditioning">Air conditioning: %s</string>
     <string name="address_line_2">%s, %s, %s</string>
     <string name="empty_search_results">Looks like there aren\'t any results, try a new search!</string>
+    <string name="directions">Directions</string>
 </resources>

@@ -12,4 +12,9 @@
         <item name="backgroundTint">@color/colorPrimary</item>
     </style>
 
+    <style name="M2Button" parent="Widget.AppCompat.Button">
+        <item name="android:background">@drawable/button_background</item>
+        <item name="android:textColor">@color/button_color_selector</item>
+    </style>
+
 </resources>
