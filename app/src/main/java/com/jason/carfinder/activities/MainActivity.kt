@@ -13,7 +13,8 @@ import android.os.Bundle
 import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
-import android.util.Log
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import android.widget.ExpandableListView
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -74,7 +75,8 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback,
                 }
                 adapter.companies.clear()
                 adapter.companies.addAll(it.results)
-            } ?: Log.d(TAG, "Call failed $response")
+                mapFragment.getMapAsync(this)
+            } ?: setViewVisibilities(false, true)
         })
     }
 
@@ -115,16 +117,22 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback,
         viewModel.getCarCompanies()
     }
 
+    @SuppressLint("MissingPermission")
     override fun onMapReady(map: GoogleMap?) {
         map?.let {
+            it.isMyLocationEnabled = true
             val curr = if (viewModel.latitude != 0.0 && viewModel.longitude != 0.0) {
                 LatLng(viewModel.latitude, viewModel.longitude)
             } else {
                 LatLng(34.0109741, -118.4908714)
             }
-            it.addMarker(MarkerOptions().position(curr)
-                    .title("Your search")
-                    .icon(bitmapDescriptorFromVector(this, R.drawable.ic_person_pin_circle)))
+            it.addMarker(MarkerOptions().position(curr).title("Your search").icon(bitmapDescriptorFromVector(this, R.drawable.ic_person_pin_circle)))
+
+            viewModel.results.forEach {
+                val latLng = LatLng(it.location.latitude.toDouble(), it.location.longitude.toDouble())
+                map.addMarker(MarkerOptions().position(latLng).title(it.provider.company_name))
+            }
+
             it.moveCamera(CameraUpdateFactory.newLatLngZoom(curr, 10.0f))
         }
     }
@@ -153,6 +161,25 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback,
 
     override fun onChildClick(parent: ExpandableListView?, v: View?, groupPosition: Int, childPosition: Int, id: Long): Boolean {
         return false
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menuInflater.inflate(R.menu.options_menu, menu)
+        return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.sort ->{
+                showSortDialog()
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
+
+    private fun showSortDialog() {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
     companion object {

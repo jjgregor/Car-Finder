@@ -15,9 +15,12 @@ import kotlin.collections.ArrayList
 
 class MainActivityViewModel(app: Application) : AndroidViewModel(app) {
 
-    init { (app as CarFinderApp).component.inject(this) }
+    init {
+        (app as CarFinderApp).component.inject(this)
+    }
 
-    @Inject lateinit var amadeusService: AmadeusService
+    @Inject
+    lateinit var amadeusService: AmadeusService
 
     var latitude = 0.0
     var longitude = 0.0
@@ -39,7 +42,10 @@ class MainActivityViewModel(app: Application) : AndroidViewModel(app) {
                         results = it.results
                         carsObserver.value = it
                     } ?: Log.d(TAG, "Amadeus reponse is null $response")
-                }, { t: Throwable? -> Log.d(TAG, "Amadeus reponse is null $t") })
+                }, { t: Throwable? ->
+                    Log.d(TAG, "Amadeus response is null $t")
+                    carsObserver.value = null
+                })
     }
 
     private fun getQueryMap(): Map<String, String> {
