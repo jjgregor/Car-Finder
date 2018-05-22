@@ -27,9 +27,9 @@ class MainActivityViewModel(app: Application) : AndroidViewModel(app) {
     var startDate = Date()
     var endDate = Date()
     var radius = 50
-
     val carsObserver = MutableLiveData<AmadeusResponse>()
     var results = ArrayList<Company>()
+    val selectedSort = Sort(DISTANCE + ASC, DISTANCE, ASC)
 
     private fun formatDate(date: Date) = SimpleDateFormat("yyyy-MM-dd", Locale.US).format(date).toString()
 

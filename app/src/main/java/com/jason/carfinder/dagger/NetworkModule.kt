@@ -5,7 +5,6 @@ import android.content.Context
 import com.facebook.stetho.okhttp3.StethoInterceptor
 import com.jason.carfinder.BuildConfig
 import com.jason.carfinder.R
-import com.jason.carfinder.utils.ObjectMapperFactory
 import dagger.Module
 import dagger.Provides
 import okhttp3.Cache
@@ -13,7 +12,7 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory
-import retrofit2.converter.jackson.JacksonConverterFactory
+import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Named
 
 @Module
@@ -47,7 +46,7 @@ class NetworkModule(val context: Context) {
                 .addInterceptor(interceptor)
                 .build()
         return Retrofit.Builder().baseUrl(context.getString(R.string.amadeus_api))
-                .addConverterFactory(JacksonConverterFactory.create(ObjectMapperFactory().getObjectMapper()))
+                .addConverterFactory(GsonConverterFactory.create())
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                 .client(newClient)
                 .build()

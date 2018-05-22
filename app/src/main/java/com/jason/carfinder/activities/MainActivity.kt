@@ -13,6 +13,7 @@ import android.os.Bundle
 import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -27,13 +28,15 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.jason.carfinder.R
 import com.jason.carfinder.adapters.CarExpandableListAdapter
+import com.jason.carfinder.fragments.SortDialogFragment
 import com.jason.carfinder.models.AmadeusResponse
 import com.jason.carfinder.models.MainActivityViewModel
+import com.jason.carfinder.models.Sort
 import kotlinx.android.synthetic.main.activity_main.*
 
 
 class MainActivity : AppCompatActivity(), OnMapReadyCallback,
-        ExpandableListView.OnGroupClickListener, ExpandableListView.OnChildClickListener {
+        ExpandableListView.OnGroupClickListener, ExpandableListView.OnChildClickListener, SortDialogFragment.OnSortSelectedListener {
 
     private lateinit var viewModel: MainActivityViewModel
     private lateinit var mapFragment: SupportMapFragment
@@ -163,6 +166,10 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback,
         return false
     }
 
+    override fun onSortSelected(sort: Sort?) {
+        Log.d(TAG, "Sort it out")
+    }
+
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.options_menu, menu)
         return super.onCreateOptionsMenu(menu)
@@ -170,7 +177,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback,
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
-            R.id.sort ->{
+            R.id.sort -> {
                 showSortDialog()
                 true
             }
@@ -179,7 +186,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback,
     }
 
     private fun showSortDialog() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        SortDialogFragment.newInstance(viewModel.selectedSort).show(fragmentManager, SortDialogFragment.TAG)
     }
 
     companion object {

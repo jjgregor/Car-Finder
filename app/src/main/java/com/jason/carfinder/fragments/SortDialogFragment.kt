@@ -9,6 +9,7 @@ import android.support.v7.app.AlertDialog
 import android.widget.ArrayAdapter
 import com.jason.carfinder.models.Sort
 import com.jason.carfinder.models.getSortList
+import com.jason.carfinder.models.getSortTitles
 
 
 class SortDialogFragment : DialogFragment(), DialogInterface.OnClickListener {
@@ -43,7 +44,7 @@ class SortDialogFragment : DialogFragment(), DialogInterface.OnClickListener {
                         activity,
                         android.R.layout.simple_list_item_single_choice,
                         android.R.id.text1,
-                        getSortList()
+                        getSortTitles()
                 ),
                 getSortList().indexOf(arguments.getSerializable(SELECTED_SORT)),
                 this
@@ -64,6 +65,7 @@ class SortDialogFragment : DialogFragment(), DialogInterface.OnClickListener {
     }
 
     companion object {
+        val TAG: String = SortDialogFragment::class.java.name
         const val SELECTED_SORT = "selected-sort"
 
         fun newInstance(selectedSort: Sort): SortDialogFragment {
