@@ -3,6 +3,7 @@ package com.jason.carfinder.models
 import android.app.Application
 import android.arch.lifecycle.AndroidViewModel
 import android.arch.lifecycle.MutableLiveData
+import android.location.Location
 import android.util.Log
 import com.jason.carfinder.CarFinderApp
 import com.jason.carfinder.services.AmadeusService
@@ -12,6 +13,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 import javax.inject.Inject
 import kotlin.collections.ArrayList
+import com.google.android.gms.maps.model.LatLng
 
 class MainActivityViewModel(app: Application) : AndroidViewModel(app) {
 
@@ -27,9 +29,9 @@ class MainActivityViewModel(app: Application) : AndroidViewModel(app) {
     var startDate = Date()
     var endDate = Date()
     var radius = 50
-    val carsObserver = MutableLiveData<AmadeusResponse>()
+    val carsObserver = MutableLiveData<ArrayList<Company>>()
     var results = ArrayList<Company>()
-    val selectedSort = Sort(DISTANCE + ASC, DISTANCE, ASC)
+    var selectedSort = DIST_ASC
 
     private fun formatDate(date: Date) = SimpleDateFormat("yyyy-MM-dd", Locale.US).format(date).toString()
 
@@ -39,13 +41,33 @@ class MainActivityViewModel(app: Application) : AndroidViewModel(app) {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({ response ->
                     response?.let {
-                        results = it.results
-                        carsObserver.value = it
+                        setDistances(it.results)
+                        carsObserver.value = results
                     } ?: Log.d(TAG, "Amadeus reponse is null $response")
                 }, { t: Throwable? ->
                     Log.d(TAG, "Amadeus response is null $t")
                     carsObserver.value = null
                 })
+    }
+
+    private fun setDistances(companies: ArrayList<Company>) {
+
+        companies.forEach {
+            val start = LatLng(latitude, longitude)
+            val finish = LatLng(it.location.latitude.toDouble(), it.location.longitude.toDouble())
+
+            val startLocation = Location("start")
+            startLocation.latitude = start.latitude
+            startLocation.longitude = start.longitude
+
+            val finishLocation = Location("finish")
+            finishLocation.latitude = finish.latitude
+            finishLocation.longitude = finish.longitude
+
+            it.distance = startLocation.distanceTo(finishLocation) * 0.000621371
+        }
+
+        results = companies
     }
 
     private fun getQueryMap(): Map<String, String> {
@@ -56,6 +78,30 @@ class MainActivityViewModel(app: Application) : AndroidViewModel(app) {
         map[DROP_OFF] = formatDate(endDate)
         map[RADIUS] = radius.toString()
         return map
+    }
+
+    fun sortResults(sort: String) {
+        selectedSort = sort
+
+        when (sort) {
+            COMP_ASC -> {
+                results.sortBy { it.provider.company_name }
+            }
+            COMP_DSC -> {
+                results.sortBy { it.provider.company_name.reversed() }
+            }
+            DIST_ASC -> {
+                results.sortBy { it.distance }
+            }
+            DIST_DSC -> {
+                results.sortByDescending { it.distance }
+            }
+            else -> {
+                results.sortBy { it.distance }
+            }
+        }
+
+        carsObserver.value = results
     }
 
     companion object {

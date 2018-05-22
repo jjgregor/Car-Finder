@@ -7,18 +7,17 @@ import android.content.DialogInterface
 import android.os.Bundle
 import android.support.v7.app.AlertDialog
 import android.widget.ArrayAdapter
-import com.jason.carfinder.models.Sort
-import com.jason.carfinder.models.getSortList
+import com.jason.carfinder.models.DIST_ASC
 import com.jason.carfinder.models.getSortTitles
 
 
 class SortDialogFragment : DialogFragment(), DialogInterface.OnClickListener {
 
     private lateinit var listener: OnSortSelectedListener
-    private lateinit var selected: Sort
+    private lateinit var selected: String
 
     interface OnSortSelectedListener {
-        fun onSortSelected(sort: Sort?)
+        fun onSortSelected(sort: String)
     }
 
     override fun onAttach(context: Context) {
@@ -36,7 +35,7 @@ class SortDialogFragment : DialogFragment(), DialogInterface.OnClickListener {
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        selected = savedInstanceState?.getSerializable("curSelected") as? Sort ?: arguments.getSerializable(SELECTED_SORT) as Sort
+        selected = savedInstanceState?.getString("curSelected") ?: arguments.getString(SELECTED_SORT)
 
         val builder = AlertDialog.Builder(activity)
         builder.setSingleChoiceItems(
@@ -46,14 +45,14 @@ class SortDialogFragment : DialogFragment(), DialogInterface.OnClickListener {
                         android.R.id.text1,
                         getSortTitles()
                 ),
-                getSortList().indexOf(arguments.getSerializable(SELECTED_SORT)),
+                getSortTitles().indexOf(arguments.getSerializable(SELECTED_SORT)),
                 this
         )
         builder.setPositiveButton("Apply", { _, _ ->
             listener.onSortSelected(selected)
         })
         builder.setNegativeButton("Clear", { _, _ ->
-            listener.onSortSelected(null)
+            listener.onSortSelected(DIST_ASC)
         })
         builder.setTitle("Sort")
 
@@ -61,17 +60,17 @@ class SortDialogFragment : DialogFragment(), DialogInterface.OnClickListener {
     }
 
     override fun onClick(dialog: DialogInterface?, which: Int) {
-        selected = getSortList()[which]
+        selected = getSortTitles()[which]
     }
 
     companion object {
         val TAG: String = SortDialogFragment::class.java.name
         const val SELECTED_SORT = "selected-sort"
 
-        fun newInstance(selectedSort: Sort): SortDialogFragment {
+        fun newInstance(selectedSort: String): SortDialogFragment {
             val fragment = SortDialogFragment()
             val args = Bundle()
-            args.putSerializable(SELECTED_SORT, selectedSort)
+            args.putString(SELECTED_SORT, selectedSort)
             fragment.arguments = args
             return fragment
         }

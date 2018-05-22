@@ -1,17 +1,18 @@
 package com.jason.carfinder.models
 
-data class AmadeusResponse(val results: ArrayList<Company> = ArrayList())
+data class AmadeusResponse(val results: ArrayList<Company> = arrayListOf())
 
 data class Company(val provider: Provider = Provider(),
                    val location: Location = Location(),
                    val branch_id: String = "",
                    val address: Address = Address(),
-                   val cars: ArrayList<CarsObject>)
+                   val cars: ArrayList<CarsObject> = arrayListOf(),
+                   var distance: Double = 0.0)
 
 data class Provider(val company_code: String = "",
                     val company_name: String = "")
 
-data class Location(val latitude: String = "",
+data class Location(var latitude: String = "",
                     val longitude: String = "")
 
 data class Address(val line1: String? = "",

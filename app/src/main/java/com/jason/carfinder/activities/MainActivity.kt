@@ -13,7 +13,6 @@ import android.os.Bundle
 import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -30,10 +29,9 @@ import com.jason.carfinder.R
 import com.jason.carfinder.adapters.CarExpandableListAdapter
 import com.jason.carfinder.fragments.SortDialogFragment
 import com.jason.carfinder.models.AmadeusResponse
+import com.jason.carfinder.models.Company
 import com.jason.carfinder.models.MainActivityViewModel
-import com.jason.carfinder.models.Sort
 import kotlinx.android.synthetic.main.activity_main.*
-
 
 class MainActivity : AppCompatActivity(), OnMapReadyCallback,
         ExpandableListView.OnGroupClickListener, ExpandableListView.OnChildClickListener, SortDialogFragment.OnSortSelectedListener {
@@ -54,8 +52,9 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback,
 
         mapFragment = supportFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
 
-        if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION), REQUEST_CODE)
+        if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED ||
+                ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION, android.Manifest.permission.ACCESS_COARSE_LOCATION), REQUEST_CODE)
             mapFragment.getMapAsync(this)
         } else {
             getLocationData()
@@ -69,15 +68,15 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback,
     }
 
     private fun initObservers() {
-        viewModel.carsObserver.observe(this, Observer<AmadeusResponse> { response ->
+        viewModel.carsObserver.observe(this, Observer<ArrayList<Company>> { response ->
             response?.let {
-                if (it.results.isNotEmpty() == true) {
+                if (it.isNotEmpty() == true) {
                     setViewVisibilities(true, false)
                 } else {
                     setViewVisibilities(false, true)
                 }
                 adapter.companies.clear()
-                adapter.companies.addAll(it.results)
+                adapter.companies.addAll(it)
                 mapFragment.getMapAsync(this)
             } ?: setViewVisibilities(false, true)
         })
@@ -166,8 +165,8 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback,
         return false
     }
 
-    override fun onSortSelected(sort: Sort?) {
-        Log.d(TAG, "Sort it out")
+    override fun onSortSelected(sort: String) {
+        viewModel.sortResults(sort)
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
