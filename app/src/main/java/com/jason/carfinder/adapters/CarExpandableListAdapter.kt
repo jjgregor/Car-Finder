@@ -9,7 +9,7 @@ import android.widget.TextView
 import com.jason.carfinder.R
 import com.jason.carfinder.models.Company
 
-class CarExpandableListAdapter(val context: Context, val companies: ArrayList<Company>) : BaseExpandableListAdapter() {
+class CarExpandableListAdapter(private val context: Context, val companies: ArrayList<Company>) : BaseExpandableListAdapter() {
 
     override fun getChild(groupPosition: Int, childPosititon: Int) = companies[groupPosition].cars[childPosititon]
 
@@ -23,24 +23,29 @@ class CarExpandableListAdapter(val context: Context, val companies: ArrayList<Co
         }
 
         val type = cv?.findViewById<TextView>(R.id.category_type)
+        val price = cv?.findViewById<TextView>(R.id.price)
         val code = cv?.findViewById<TextView>(R.id.acriss_code)
         val fuel = cv?.findViewById<TextView>(R.id.fuel_type)
         val air = cv?.findViewById<TextView>(R.id.air_conditioning)
 
         type?.let {
             it.text = String.format(context.getString(R.string.category_type),
-                    getChild(position, childPosition).vehicle_info?.category,
-                    getChild(position, childPosition).vehicle_info?.type)
+                    getChild(position, childPosition).vehicle_info.category,
+                    getChild(position, childPosition).vehicle_info.type)
         }
-        code?.let { it.text = getChild(position, childPosition).vehicle_info?.acriss_code }
+        price?.let {
+            it.text = String.format(context.getString(R.string.price_formatted),
+                    getChild(position, childPosition).estimated_total.amount)
+        }
+        code?.let { it.text = getChild(position, childPosition).vehicle_info.acriss_code }
         fuel?.let {
             it.text = String.format(context.getString(R.string.fuel_type),
-                    getChild(position, childPosition).vehicle_info?.fuel,
-                    getChild(position, childPosition).vehicle_info?.type)
+                    getChild(position, childPosition).vehicle_info.fuel,
+                    getChild(position, childPosition).vehicle_info.type)
         }
         air?.let {
             it.text = String.format(context.getString(R.string.air_conditioning),
-                    getChild(position, childPosition).vehicle_info?.air_conditioning.toString())
+                    getChild(position, childPosition).vehicle_info.air_conditioning)
         }
         return cv
     }

@@ -1,31 +1,5 @@
 package com.jason.carfinder.models
 
-fun sort(sort: String) {
-    when (sort) {
-        COMP_ASC -> {
-
-        }
-        COMP_DSC -> {
-
-        }
-        DIST_ASC -> {
-
-        }
-        DIST_DSC -> {
-
-        }
-        PRICE_ASC -> {
-
-        }
-        PRICE_DSC -> {
-
-        }
-        else -> {
-
-        }
-    }
-}
-
 fun getSortTitles() = arrayListOf(
         COMP_ASC,
         COMP_DSC,

@@ -5,6 +5,7 @@
     <string name="maps_key">AIzaSyAIDO67evlrmNlKO1MFRkVnuQ-D3L9lMaI</string>
 
     <string name="category_type">%s %s</string>
+    <string name="price_formatted">$%s</string>
     <string name="fuel_type">Fuel type: %s</string>
     <string name="air_conditioning">Air conditioning: %s</string>
     <string name="address_line_2">%s, %s, %s</string>

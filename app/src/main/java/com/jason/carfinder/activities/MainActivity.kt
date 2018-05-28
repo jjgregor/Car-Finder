@@ -28,7 +28,6 @@ import com.google.android.gms.maps.model.MarkerOptions
 import com.jason.carfinder.R
 import com.jason.carfinder.adapters.CarExpandableListAdapter
 import com.jason.carfinder.fragments.SortDialogFragment
-import com.jason.carfinder.models.AmadeusResponse
 import com.jason.carfinder.models.Company
 import com.jason.carfinder.models.MainActivityViewModel
 import kotlinx.android.synthetic.main.activity_main.*
@@ -77,6 +76,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback,
                 }
                 adapter.companies.clear()
                 adapter.companies.addAll(it)
+                adapter.notifyDataSetChanged()
                 mapFragment.getMapAsync(this)
             } ?: setViewVisibilities(false, true)
         })

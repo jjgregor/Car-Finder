@@ -5,6 +5,7 @@ import android.arch.lifecycle.AndroidViewModel
 import android.arch.lifecycle.MutableLiveData
 import android.location.Location
 import android.util.Log
+import com.google.android.gms.maps.model.LatLng
 import com.jason.carfinder.CarFinderApp
 import com.jason.carfinder.services.AmadeusService
 import rx.android.schedulers.AndroidSchedulers
@@ -13,7 +14,6 @@ import java.text.SimpleDateFormat
 import java.util.*
 import javax.inject.Inject
 import kotlin.collections.ArrayList
-import com.google.android.gms.maps.model.LatLng
 
 class MainActivityViewModel(app: Application) : AndroidViewModel(app) {
 
@@ -84,21 +84,13 @@ class MainActivityViewModel(app: Application) : AndroidViewModel(app) {
         selectedSort = sort
 
         when (sort) {
-            COMP_ASC -> {
-                results.sortBy { it.provider.company_name }
-            }
-            COMP_DSC -> {
-                results.sortBy { it.provider.company_name.reversed() }
-            }
-            DIST_ASC -> {
-                results.sortBy { it.distance }
-            }
-            DIST_DSC -> {
-                results.sortByDescending { it.distance }
-            }
-            else -> {
-                results.sortBy { it.distance }
-            }
+            COMP_ASC -> results.sortBy { it.provider.company_name }
+            COMP_DSC -> results.sortBy { it.provider.company_name.reversed() }
+            DIST_ASC -> results.sortBy { it.distance }
+            DIST_DSC -> results.sortByDescending { it.distance }
+            PRICE_ASC -> results.forEach { it.cars.sortBy { it.estimated_total.amount.toDouble() } }
+            PRICE_DSC -> results.forEach { it.cars.sortByDescending { it.estimated_total.amount.toDouble() } }
+            else -> results.sortBy { it.distance }
         }
 
         carsObserver.value = results
