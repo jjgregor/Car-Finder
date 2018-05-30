@@ -58,6 +58,8 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback,
         } else {
             getLocationData()
         }
+
+        fab.setOnClickListener {  }
     }
 
     private fun setupExpandableListView() {

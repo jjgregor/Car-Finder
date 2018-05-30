@@ -68,14 +68,14 @@ class CarExpandableListAdapter(private val context: Context, val companies: Arra
         val addressLine1 = cv?.findViewById<TextView>(R.id.address_line_1)
         val addressLine2 = cv?.findViewById<TextView>(R.id.address_line_2)
 
-        name?.let { it.text = getGroup(position).provider?.company_name }
-        addressLine1?.let { it.text = getGroup(position).address?.line1 }
+        name?.let { it.text = getGroup(position).provider.company_name }
+        addressLine1?.let { it.text = getGroup(position).address.line1 }
         addressLine2?.let {
             it.text = String.format(
                     context.getString(R.string.address_line_2),
-                    getGroup(position).address?.city,
-                    getGroup(position).address?.region,
-                    getGroup(position).address?.country)
+                    getGroup(position).address.city,
+                    getGroup(position).address.region,
+                    getGroup(position).address.country)
         }
 
         return cv

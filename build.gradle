@@ -5,6 +5,7 @@ buildscript {
     ext.swipe_stack_version = '1.0.3'
     ext.glide_version = '4.1.1'
     ext.dagger_version = '2.16'
+    ext.play_services_version = '15.0.1'
     repositories {
         google()
         jcenter()
