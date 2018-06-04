@@ -1,9 +1,9 @@
 <resources>
     <string name="app_name">Car Finder</string>
     <string name="amadeus_api">http://api.sandbox.amadeus.com/</string>
-    <string name="amadeus_key">***************************************</string>
-    <string name="maps_key">***************************************</string>
-    <string name="places_key">***************************************</string>
+    <string name="amadeus_key">zSWrzQ41V86aAsPnGqyVY9fOAkcnqlyK</string>
+    <string name="maps_key">AIzaSyAIDO67evlrmNlKO1MFRkVnuQ-D3L9lMaI</string>
+    <string name="places_key">AIzaSyAIDO67evlrmNlKO1MFRkVnuQ-D3L9lMaI</string>
 
     <string name="category_type">%s %s</string>
     <string name="price_formatted">$%s</string>
