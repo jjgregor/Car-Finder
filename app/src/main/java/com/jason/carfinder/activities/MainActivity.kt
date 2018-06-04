@@ -27,6 +27,7 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.jason.carfinder.R
 import com.jason.carfinder.adapters.CarExpandableListAdapter
+import com.jason.carfinder.fragments.SearchBottomSheetDialogFragment
 import com.jason.carfinder.fragments.SortDialogFragment
 import com.jason.carfinder.models.Company
 import com.jason.carfinder.models.MainActivityViewModel
@@ -38,6 +39,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback,
     private lateinit var viewModel: MainActivityViewModel
     private lateinit var mapFragment: SupportMapFragment
     private lateinit var adapter: CarExpandableListAdapter
+    private lateinit var bottomSheet: SearchBottomSheetDialogFragment
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,6 +47,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback,
         setViewVisibilities(false, false)
         viewModel = ViewModelProviders.of(this).get(MainActivityViewModel::class.java)
         adapter = CarExpandableListAdapter(this, viewModel.results)
+        bottomSheet = SearchBottomSheetDialogFragment()
 
         setupExpandableListView()
         initObservers()
@@ -59,7 +62,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback,
             getLocationData()
         }
 
-        fab.setOnClickListener {  }
+        fab.setOnClickListener { bottomSheet.show(supportFragmentManager, SearchBottomSheetDialogFragment.TAG) }
     }
 
     private fun setupExpandableListView() {
